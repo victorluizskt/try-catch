@@ -1,7 +1,5 @@
 package application;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,46 +38,9 @@ public class Program {
             System.out.println(e.getMessage());
         } catch (InputMismatchException e) {
             System.out.println("Invalid Input.");
-        } 
-    }
-
-    public static void method1() {
-        System.out.println("***METHOD1 START***");
-        method2();
-        System.out.println("***METHON1 END***");
-    }
-
-    public static void method2() {
-        System.out.println("***METHOD2 START***");
-        Scanner input = new Scanner(System.in);
-        try {
-            String[] vect = input.nextLine().split(" ");
-            int position = input.nextInt();
-            System.out.println(vect[position]);
-        } catch (InputMismatchException e) {
-            System.out.println("Impossível acessar dado.");
-            // e.printStackTrace(); mostra o rastreamento de onde os erros estão vindo.
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Posição não existe.");
-        }
-        System.out.println("***METHOD2 END***");
-    }
-
-    public static void files() throws FileNotFoundException {
-        File file = new File("C:\\temp\\in.txt");
-        Scanner input = null;
-        try {
-            input = new Scanner(file);
-            while (input.hasNextLine()) {
-                System.out.println(input.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error opening file: " + e.getMessage());
-        } // bloco finally executa mesmo dando ou certo o bloco try/catch.
-        finally {
-            if (input != null) {
-                input.close();
-            }
+        } catch (RuntimeException e) {
+            System.out.println("Unexpected error.");
         }
     }
+
 }
