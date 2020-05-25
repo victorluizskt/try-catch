@@ -3,6 +3,7 @@ package model.entities;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import model.exceptions.DomainException;
 
 /**
  *
@@ -18,10 +19,15 @@ public class Reservation {
     private Date checkOut;
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+
     /*
     Construct
      */
-    public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
+    public Reservation(Integer roomNumber, Date checkIn, Date checkOut){
+        if (!checkOut.after(checkIn)) {
+            throw new DomainException("Error in reservation: check-out"
+                    + "date must be after check-in date.");
+        }
         this.roomNumber = roomNumber;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -50,23 +56,23 @@ public class Reservation {
     Metodos
      */
     public long duration() {
-        long diff = checkOut.getTime() - checkIn.getTime(); // Converte as duas datas para millisegundos;       
+        long diff = checkOut.getTime() - checkIn.getTime(); // Converte as duas datas para millisegundos;  
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); // A classe TimeUnit faz a conversão de millisegundos para dias.
     }
 
-    public String updateDates(Date checkIn, Date checkOut) {
+    // O meu metódo a partir disso pode lançar uma exceção.
+    public void updateDates(Date checkIn, Date checkOut) {
         Date now = new Date();
         if (checkIn.before(now) || checkOut.before(now)) {
-            return "Error in reservartion: Reservation dates for update"
-                    + " must be future dates";
+            throw new DomainException("Error in reservartion: Reservation dates for update"
+                    + " must be future date");
         }
         if (!checkOut.after(checkIn)) {
-            return "Error in reservation: check-out"
-                    + "date must be after check-in date.";
+            throw new DomainException("Error in reservation: check-out"
+                    + "date must be after check-in date.");
         }
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        return null;
     }
 
     /*
